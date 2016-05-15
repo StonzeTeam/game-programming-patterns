@@ -1,57 +1,75 @@
 ^title Introduction
+^title 도입
 
 In fifth grade, my friends and I were given access to a little unused
 classroom housing a couple of very beat-up TRS-80s. Hoping to inspire us, a
 teacher found a printout of some simple BASIC programs for us to tinker with.
+5번째 단계에서, 나와 내 친구들은 매우 낡아 빠진 g한 쌍의 TRS-80가 있는 사용하지 않는 작은 교실에의 접근을 허용받았다. 우리들을 격려하기  위하여, 선생님은 우리들을 위해 만지작거릴수 있는 몇개의 간단한 기본 프로그램 인쇄물을 찾았다. 
 
 The audio cassette drives on the computers were broken, so any time we wanted to
 run some code, we'd have to carefully type it in from scratch. This led us
 to prefer programs that were only a few lines long:
+컴퓨터에서 작동할 수 있는 오디오 카세트는 고장났었고, 그래서 항상 우리는 몇 개의 코드를 해독하는 것을 원했고, 우리는 아무런 사전 지식 없이 그것을 조심스럽게 입력해야만 했다. 이것을 우리들이 오직 적은 길이의 줄로만 된 프로그램들을 선호하도록 만들었다;
 
+<span name="radical"></span>
 <span name="radical"></span>
 
     10 PRINT "BOBBY IS RADICAL!!!"
     20 GOTO 10
-
+    10 PRINT "BOBBY는 철저하다!!!"
+    20 GOTO 10
+    
+<aside name="radical">
 <aside name="radical">
 
 Maybe if the computer prints it enough times, it will magically become true.
+아마도 컴퓨터가 이것을 충분한 시간 내에 출력한다면, 이것은 마술처럼 현실이 될 것이다.
 
+</aside>
 </aside>
 
 Even so, the process was fraught with peril. We didn't know *how* to program,
 so a tiny syntax error was impenetrable to us. If the program didn't work,
 which was often, we started over from the beginning.
+그렇기는 하지만, 이 과정은 위험투성이였다. 우리는 *어떻게* 프로그래밍하는지 몰랐고, 그래서 아주 작은 syntax error가 우리를 통과할 수 없게 했다. 만약 프로그램이 빈번하게 작동하지 않았다면, 우리는 처음부터 시작했다.
 
 At the back of the stack of pages was a real monster: a program that took up
 several dense pages of code. It took a while before we worked up the courage
 to even try it, but it was irresistible -- the title above the listing was
 "Tunnels and Trolls". We had no idea what it did, but it sounded like a game,
 and what could be cooler than a computer game that you programmed yourself?
+산더미의 종이들의 배후는 마치 괴물같았다: 프로그램은 코드의 몇몇 빽빽한 페이지를 차지했다. 이는 우리가 그것을 시도하기 위한 용기를 북돋기 전 시간을 좀 필요로 했지만, 저항할 수 없었다 - - 목차 위에 있는 제목은 "터널과 트롤". 우리는 어떻게 그렇게 했는지 모르겠지만, 이것은 마치 게임처럼 보였다. 당신이 혼자 프로그래밍한다는 것이 컴퓨터 게임을 한다는 것과 비교해 무엇이 더 멋져 보이겠는가?
 
 We never did get it running, and after a year, we moved out of that classroom.
 (Much later when I actually knew a bit of BASIC, I realized that it was just a
 character generator for the table-top game and not a game in itself.) But the
 die was cast -- from there on out, I wanted to be a game programmer.
+우리는 프로그램을 실행하는 것에 실패하였고, 1년 후, 그 교실을 떠났다.
+(시간이 많이 지나고 내가 실제로 BASIC을 조금 알게 되었을 때, 나는 그것이 단지 테이블 윗면 게임을 위한 캐릭터 발전기였고 그것 자체가 본질적으로 게임이 아니란 것을 깨달았다.) 하지만 주사위는 이미 던져졌다 - - 거기서부터, 나는 게임 프로그래머가 되기를 원했다.
 
 When I was in my teens, my family got a Macintosh with QuickBASIC and later
 THINK C. I spent almost all of my <span name="snakes">summer vacations</span>
 hacking together games. Learning on my own was slow and painful. I'd get
 something up and running easily -- maybe a map screen or a little puzzle --
 but as the program grew, it got harder and harder.
+내가 10대였을 때, 우리 가족은 QuickBASIC과 함께 Macintosh를 마련했고 이 후 C를 생각했다. 나는 거의 모든 나의 <span name="snakes">여름방학</span>을 게임을 함께 해킹하는 것에 보냈다. 나 혼자 배우는 것은 느리고 고통스러웠다. 나는 어떤 것을 준비하고 쉽게 실행했다 - - 아마도 지도 스크린이나 작은 퍼즐 - - 하지만 프로그램이 커지는 만큼, 그것은 계속해서 어려워졌다.
 
+<aside name="snakes">
 <aside name="snakes">
 
 Many of my summers were also spent catching snakes and turtles in the swamps
 of southern Louisiana. If it wasn't so blisteringly hot outside, there's a
 good chance this would be a herpetology book instead of a programming one.
+나의 많은 여름은 남부 루이지애나의 늪지에서 뱀과 거북이를 잡는 것으로 보냈다. 만약 밖이 격렬하게 덥지 않았다면, 이 책은 프로그래밍 보다 파충류학에 관한 책이 되는 좋은 기회였을 것이다. 
 
+</aside>
 </aside>
 
 At first, the challenge was just getting something working. Then, it became
 figuring out how to write programs bigger than what would fit in my head. Instead
 of just reading about "How to Program in C++", I started trying to find books
 about how to *organize* programs.
+처음에는, 그러한 도전이 뭔가 일하는 것 같았다. 그리고나서, 이는 내 머리에 들어가있는 것보다 어떻게 프로그램을 더 크게 적을 수 있는가를 발견하게 되었다. 단지 "어떻게 C++에서 프로그래밍하는가"를 읽는 것 보다, 나는 어떻게 프로그램을 *구성*할 것인가에 대해 찾는 것을 시도하기 시작했다.
 
 Fast-forward several years, and a <span name="friend">friend</span> hands me a
 book: *Design Patterns: Elements of Reusable Object-Oriented Software*.
@@ -60,14 +78,18 @@ to cover in one sitting. I still struggled with my own programs, but it was
 such a relief to see that other people struggled too and came up with
 solutions. I felt like I finally had a couple of *tools* to use instead of
 just my bare hands.
+몇 년을 빨리감기 해서, 그리고 <span name="friend">친구가</span> 나에게 책을 건네주었다: *디자인 패턴: 재사용할 수 있는 객체 지향의 소포트웨어 요소들*. 마침내! 내가 십대 때부터 찾았던 책을 찾았다. 나는 한 자리에 앉아서 그 책을 처음부터 끝까지 읽었다. 나는 여전히 내 자신의 프로그램들과 고군분투 하고 있지만, 이것은 다른 사람들도 나처럼 고군부투하고 있고 해결책을 찾았다는 것을 보며 하나의 위안을 얻었다. 나는 내가 마침내 나의 맨손 대신 사용할 수 있는 한 쌍의 *도구들*을 얻었다고 느꼈다. 
 
+<aside name="friend">
 <aside name="friend">
 
 This was the first time we'd met, and five minutes after being introduced, I
 sat down on his couch and spent the next few hours completely ignoring him and
 reading. I'd like to think my social skills have improved at least a little
 since then.
+이는 친구와 내가 처음 만난 날이며, 서로 자기 소개를 한 후 5분이 지난 시간이며, 나는 그의 소파에 앉아 이후 몇시간동안 그를 완벽하게 무시하고 읽었다. 나는 적어도 그 이후 내 사회성이 향상되었다고 생각하고 싶다.
 
+</aside>
 </aside>
 
 In 2001, I landed my dream job: software engineer at Electronic Arts. I
@@ -107,6 +129,7 @@ patterns I've found in games, and presented them here so that we can spend our
 time inventing new things instead of *re*-inventing them.
 
 ## What's in Store
+##
 
 There are already dozens of game programming books out there. Why write
 another?
@@ -140,10 +163,12 @@ you can apply to your code. This way, you can mix and match them in a way that
 works best for the game *you* want to make.
 
 <aside name="carte">
+<aside name="carte">
 
 Another example of this *à la carte* style is the widely beloved [*Game
 Programming Gems*](http://www.satori.org/game-programming-gems/) series.
 
+</aside>
 </aside>
 
 ## How it Relates to Design Patterns
@@ -153,6 +178,7 @@ clearly bears a relationship to the classic *Design Patterns: Elements of
 Reusable Object-Oriented Software* by Erich Gamma, Richard Helm, Ralph Johnson,
 and John Vlissides (ominously called the "Gang of Four").
 
+<aside name="alexander">
 <aside name="alexander">
 
 *Design Patterns* itself was in turn inspired by a previous book. The idea of
@@ -166,6 +192,7 @@ walls and stuff), but they hoped others would use the same structure to
 describe solutions in other fields. *Design Patterns* is the Gang of Four's
 attempt to do that for software.
 
+</aside>
 </aside>
 
 By calling this book "Game Programming Patterns", I'm not trying to imply that
@@ -286,6 +313,7 @@ pattern being explained is only concerned with the return value, and not the
 work being done. In that case, the sample code will look like:
 
 ^code update
+
 
 ## Where to Go From Here
 
