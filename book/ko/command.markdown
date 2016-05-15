@@ -1,25 +1,49 @@
 ^title Command
 ^section Design Patterns Revisited
 
+^title Command 패턴
+^section 디자인 패턴 다시보기
+
 Command is one of my favorite patterns. Most large programs I write, games or
 otherwise, end up using it somewhere. When I've used it in the right place, it's
 neatly untangled some really gnarly code. For such a swell pattern, the Gang of
 Four has a predictably abstruse description:
 
+Command 패턴은 내가 좋아하는 패턴 중 하나입니다. 내가 만든 게임이나 다른 큰 프로그램 어딘가에
+이 패턴을 사용하였습니다. 이 패턴을 적재적소에 사용하면, 좋지 못한 코드를 깔끔하게 풀어줍니다.
+Gang of Four는 이 멋진 패턴에 대해서 다음과 같은 난해한 표현을 하였습니다.
+
 > Encapsulate a request as an object, thereby letting users parameterize clients
 > with different requests, queue or log requests, and support undoable
 > operations.
+
+
+> Request를 Object로 요약하고, 사용자에게
+> Client의 다양한 Request, Queue 혹은 Log Request를
+> 인자화함으로써, Request를 Object로 요약하고,
+> 실행할 수 없는 Operation를 지원할 수 있다.
 
 I think we can all agree that that's a terrible sentence. First of all, it
 mangles whatever metaphor it's trying to establish. Outside of the weird world
 of software where words can mean anything, a "client" is a *person* -- someone
 you do business with. Last I checked, human beings can't be "parameterized".
 
+나는 우리 모두가 이 흉측한 문장에 동의할 수 있다고 생각합니다. 무엇보다도 어떤 비유를 하려고
+했는지는 모르지만 그것은 의미를 훼손시키고 있습니다. 이상한 소프트웨어 바깥 세계에서는 단어가
+다양한 의미를 지닐 수 있습니다. 예를 들면 "client"는 우리가 함께 사업을 진행하는 *사람*이 됩니다.
+마지막으로 내가 알아본바로는 인간은 "인자화" 될 수 없습니다.
+
 Then, the rest of that sentence is just a list of stuff you could maybe possibly
 use the pattern for. Not very illuminating unless your use case happens to be in
 that list. *My* pithy tagline for the Command pattern is:
 
+그리고 저 문장의 나머지 부분은 Command 패턴을 사용하면 활용할 수 있는 딱딱한 목록들입니다.
+당신이 사용하고자 하는 상황이 저 목록들에 있더라도 너무 환상을 가지지는 말아주십시오.
+Command 패턴이 무엇인지 나의 간결한 표현은 다음과 같습니다.
+
 **A command is a *<span name="latin">reified</span> method call*.**
+
+**Command 패턴은 <span name="latin">구체화</span>된 메소드 호출이다.**
 
 <aside name="latin">
 
@@ -33,12 +57,22 @@ Of course, "pithy" often means "impenetrably terse", so this may not be much of
 an improvement. Let me unpack that a bit. "Reify", in case you've never heard
 it, means "make real". Another term for reifying is making something "first-class".
 
+물론, "간결한"은 종종 "눈 앞에 보이지 않을 정도로 간결함"을 의미합니다.
+그래서 나의 간결한 표현이 큰 발전은 아니라고 생각합니다. 다시 본론으로 돌아가서,
+"구체화된"은 "현실적으로 만든다"는 것을 의미합니다. "구체화된"의 또 다른은 의미는
+무엇가를 "first-class"는 의미입니다.
+
 <aside name="reflection">
 
 *Reflection systems* in some languages let you work with the types in your
 program imperatively at runtime. You can get an object that represents the class
 of some other object, and you can play with that to see what the type can do. In
 other words, reflection is a *reified type system*.
+
+*Reflection systems*은 어떤 컴퓨터 언어에서는 부득이하게 당신의 프로그램 내의 자료형을
+런타임으로만 처리할 수 있습니다. 여러분은 어떤 오브젝트의 클래스를 나타내는 클래스를 얻을 수
+있습니다. 그리고 여러분은 어떤 기능을 할 수 있을지 알아볼 수 있습니다.
+다시말해 reflection은 *구체화된 자료형 시스템*입니다.
 
 </aside>
 
@@ -47,6 +81,9 @@ it into a piece of *data* -- an object -- that you can stick in a variable, pass
 to a function, etc. So by saying the Command pattern is a "reified method call",
 what I mean is that it's a method call wrapped in an object.
 
+두 용어는 어떤 <span name="reflection">컨셉</span>을 가지고 그것을 오브젝트와 같은 변수와 같은 곳에 집어넣거나 함수를통해서 *데이터*로 바꿉니다. 그래서 Command 패턴을 "reified method call"이라고 할 때는 나는 method call이
+오브젝트 안에 랩핑된 것을 의미합니다.
+
 That sounds a lot like a "callback", "first-class function", "function pointer",
 "closure", or "partially applied function" depending on which language you're
 coming from, and indeed those are all in the same ballpark. The Gang of Four
@@ -54,21 +91,32 @@ later says:
 
 > Commands are an object-oriented replacement for callbacks.
 
+> Command들은 callback을 위한 오브젝트 지향의 교체입니다.
+
 That would be a better slugline for the pattern than the one they chose.
 
 But all of this is abstract and nebulous. I like to start chapters with
 something concrete, and I blew that. To make up for it, from here on out it's
 all examples where commands are a brilliant fit.
 
+하지만 이런 표현들은 추상적이고 애매모호합니다. 나는 구체적인 사실에 기반하여 이 챕터를 시작하고자 합니다. 이를 위해서 모든 예제들은 Command들이 훌륭하게 적용되는 곳입니다.
+
 ## Configuring Input
+
+## 입력 설정하기
 
 Somewhere in every game is a chunk of code that reads in raw user input --
 button presses, keyboard events, mouse clicks, whatever. It takes each input and
 translates it to a meaningful action in the game:
 
+버튼 눌려지거나, 키보드 이벤트, 마우스 클릭 등의 입력을 읽어들이는 코드 부분이 모든 게임에나
+있기 마련입니다. 그 코드는 각각의 입력을 받고, 게임 내에서 의미있는 행동으로 번역합니다.
+
 <img src="images/command-buttons-one.png" alt="A controller, with A mapped to swapWeapon(), B mapped to lurch(), X mapped to jump(), and Y mapped to fireGun()." />
 
 A dead simple implementation looks like:
+
+위 그림을 단순하게 완성하면 다음과 같습니다.
 
 <span name="lurch"></span>
 
@@ -77,6 +125,7 @@ A dead simple implementation looks like:
 <aside name="lurch">
 
 Pro tip: Don't press B very often.
+Pro tip: B 버튼을 너무 자주 누르지 말 것.
 
 </aside>
 
@@ -85,12 +134,16 @@ href="game-loop.html">Game Loop</a>, and I'm sure you can figure out what it
 does. This code works if we're willing to hard-wire user inputs to game actions,
 but many games let the user *configure* how their buttons are mapped.
 
+이 함수는 <a class="pattern" href="game-loop.html">게임 루프</a>에 의해 매 프레임마다 한번 호출되고, 이것을 어떤 기능을 하는지 어렵지 않게 알 수 있을 것입니다. 이 코드는 우리가 게임 액션을 위해 입력하면 당연히 실행될 것입니다. 하지만 많은 게임은 사용자들이 버튼에 따라 어떤 행동을 할지 *설정*하도록 해줍니다.
+
 To support that, we need to turn those direct calls to `jump()` and `fireGun()`
 into something that we can swap out. "Swapping out" sounds a lot like assigning
 a variable, so we need an *object* that we can use to represent a game action.
 Enter: the Command pattern.
 
 We define a base class that represents a triggerable game command:
+
+우리는 액션을 발생시키는 게임 Command를 나타내는 기본 클래스를 다음과 같이 정의합니다.
 
 <span name="one-method"></span>
 
@@ -101,17 +154,25 @@ We define a base class that represents a triggerable game command:
 When you have an interface with a single method that doesn't return anything,
 there's a good chance it's the Command pattern.
 
+만약 아무것도 리턴하지 않는 하나의 메소드로 구성된 인터페이스가 있다면, 이는 Command 패턴을 사용할 수 있는 좋은 기회입니다. 바로 위와 같은 경우입니다.
+
 </aside>
 
 Then we create subclasses for each of the different game actions:
+
+그리고 우리는 각각 다른 게임 액션을 위한 하위 클래스를 만듭니다.
 
 ^code command-classes
 
 In our input handler, we store a pointer to a command for each button:
 
+우리의 InputHandler에 각각의 버튼이 나타내는 Command를 가리키는 포인터 변수를 저장해야 합니다.
+
 ^code input-handler-class
 
 Now the input handling just delegates to those:
+
+이제 입력 핸들링은 단지 각각의 Command에 분배만 합니다.
 
 <span name="null"></span>
 
@@ -122,39 +183,65 @@ Now the input handling just delegates to those:
 Notice how we don't check for `NULL` here? This assumes each button will have
 *some* command wired up to it.
 
+우리는 여기서 `NULL`을 확인하지 않았다는 것을 확인했습니까? 이는 각각의 버튼이 *어떤* Command를 위해서 사용되고 있다는 것을 가정하였습니다.
+
 If we want to support buttons that do nothing without having to explicitly check
 for `NULL`, we can define a command class whose `execute()` method does nothing.
 Then, instead of setting a button handler to `NULL`, we point it to that object.
 This is a pattern called [Null
 Object](http://en.wikipedia.org/wiki/Null_Object_pattern).
 
+만약 우리가 명시적으로 `NULL`을 확인하지 않고 아무런 게임 액션도 하지 않는 버튼을 지원하고
+싶다면, 아무것도 행하지 않는 `execute()` 함수를 가지는 command 클래스를 정의할 수 있습니다. 그래서
+`NULL`을 위한 버튼 핸들러를 설정하는 대신에, 우리는 우리는 그런 오브젝트를 포인터를 가지고
+가리기기만 하면 된다. 이런 패턴은 [Null Object](http://en.wikipedia.org/wiki/Null_Object_pattern)라고 부릅니다.
+
 </aside>
 
 Where each input used to directly call a function, now there's a layer of
 indirection:
+
+각각의 입력이 직접적으로 함수를 호출하는 방식에서, 이제 간접적인 계층이 생겼습니다.
 
 <img src="images/command-buttons-two.png" alt="A controller, with each button mapped to a corresponding 'button_' variable which in turn is mapped to a function." />
 
 This is the Command pattern in a nutshell. If you can see the merit of it
 already, consider the rest of this chapter a bonus.
 
+이것이 바로 Command 패턴을 간단하게 표현한 것 입니다. 만약에 이 패턴의 장점을 벌써 알았다면, 챕터의 남은 부분은 보너스로 생각해도 됩니다.
+
 ## Directions for Actors
+
+## 배우들을 위한 명령
 
 The command classes we just defined work for the previous example, but they're
 pretty limited. The problem is that they assume there are these top-level
 `jump()`, `fireGun()`, etc. functions that implicitly know how to find the
 player's avatar and make him dance like the puppet he is.
 
+방금의 예제에서 우리가 정의한 Command 클래스는 완전하지 않습니다. 문제는 Command 클래스는
+플레이어의 아바타를 어떻게 찾고, 아바타를 꼭두각시처럼 춤을 추게 만드는 `jump()`, `fireGun()`과 같은
+가장 높은 층위의 함수를 가정하고 있다는 점입니다.
+
 That assumed coupling limits the usefulness of those commands. The *only* thing
 the `JumpCommand` can make jump is the player. Let's loosen that restriction.
 Instead of calling functions that find the commanded object themselves, we'll
 *pass in* the object that we want to order around:
+
+이는 커플링이 Command의 유용성을 제한하고 있다고 가정합니다. `JumpCommand`가 할 수 있는
+*유일*한 것은 플레이어를 점프하도록 하는 것입니다. 이런 부족한 점을 보안해봅시다. 명령된
+오브젝트를 호출하는 함수가 스스로 찾는 대신에, 우리는 명령하고자 하는 Command를 오브젝트에
+전달하는 것입니다.
 
 ^code actor-command
 
 Here, `GameActor` is our "game object" class that represents a character in the
 game world. We pass it in to `execute()` so that the derived command can invoke
 methods on an actor of our choice, like so:
+
+`GameActor`는 게임 세계에서 케릭터를 나타내는 "game object" 클래스입니다. 우리는 `GameActor`를
+`execute()` 함수에 전달합니다. 그러면 파생된 Command 클래스들은 GameActor에 대한 메소드를
+호출할 수 있습니다. 다음과 같습니다.
 
 ^code jump-actor
 
