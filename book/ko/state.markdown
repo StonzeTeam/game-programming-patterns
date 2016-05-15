@@ -1,6 +1,9 @@
 ^title State
 ^section Design Patterns Revisited
 
+^title State 패턴
+^section 디자인 패턴 다시보기
+
 Confession time: I went a little overboard and packed way too much into this
 chapter. It's ostensibly about the <a
 href="http://en.wikipedia.org/wiki/State_pattern" class="gof-pattern">State</a>
@@ -9,14 +12,21 @@ more fundamental concept of *finite state machines* (or "FSMs"). But then once I
 went there, I figured I might as well introduce *hierarchical state machines*
 and *pushdown automata*.
 
+자백의 시간입니다. 나는 이 챕터에 조금 흥분했고, 너무 많은 것을 이 챕터에 집어넣었습니다. 표면상 <a
+href="http://en.wikipedia.org/wiki/State_pattern" class="gof-pattern">스테이트 디자인 패턴</a>이 그런 것이지만, 나는 *finite state machines (FSM)* (유한 상태 기계)에 대한 기본적인 개념을 설명하지 않고서 게임에 대해서 그 어떤 말도 할 수 없습니다. 나는 *hierarchical state machines*과 *pushdown automata*에 대해서도 소개하기로 결정했습니다.
+
 That's a lot to cover, so to keep things as short as possible, the code samples
 here leave out a few details that you'll have to fill in on your own. I hope
 they're still clear enough for you to get the big picture.
+
+그래서 다뤄야 할 부분이 많습니다. 가능하다면 줄일 것입니다. 그래서 여기의 샘플 코드는 조금 자세한 부분은 여러분이 직접 채워야 할 것입니다. 나는 여러분이 큰 그림은 충분히 이해할 것이라고 기대합니다.
 
 Don't feel sad if you've never heard of a state machine. While well known to
 <span name="two-camps">AI and compiler</span> hackers, they aren't that familiar
 to other programming circles. I think they should be more widely known, so I'm
 going to throw them at a different kind of problem here.
+
+만약 여러분이 state machine에 대해서 들어본 적이 없다고 해도 슬퍼할 필요는 없습니다. <span name="two-camps">AI와 컴파일러</a> 해커에 대해서 잘 아는 반면에, AI와 컴파일러 헤커들은 다른 프로그래밍 분야와 친숙하지 않습니다. 나는 AI와 컴파일러 해커도 좀더 널리 알려져야한다고 생각합니다. 그래서 나는 다른 종류의 문제를 제기할 것입니다.
 
 <aside name="two-camps">
 
@@ -25,22 +35,32 @@ This pairing echoes the early days of artificial intelligence. In the &rsquo;50s
 techniques compilers now use for parsing programming languages were invented for
 parsing human languages.
 
+이런 한 쌍만들기는 인공 지능의 초기에 자주 반복되었습니다. 1950년대와 60년대에는 수많은 AI연구가 언어 처리에 집중되어 있었습니다. 현재 프로그램 언어를 파싱하기위한 컴파일러 기술은 인간 언어를 파싱하기 위해서 발명되었습니다.
+
 </aside>
 
 ## We've All Been There
+
+## 우리 모두 경험이 있어요
 
 We're working on a little side-scrolling platformer. Our job is to implement the
 heroine that is the player's avatar in the game world. That means making her
 respond to user input. Push the B button and she should jump. Simple enough:
 
+우리는 간단한 횡스크롤 게임을 만들고 있습니다. 우리의 일은 게임 세계에 있는 플레이어의 아바타인 여주인공 만들기입니다. 사용자의 입력에 여주인공을 반응하도록 해야합니다.  B 버튼을 누르면 여주인공은 점프해야 합니다. 단순합니다.
+
 ^code spaghetti-1
 
 Spot the bug?
+
+버그를 발견했나요?
 
 There's nothing to prevent "air jumping" -- keep hammering B while she's in the
 air, and she will float forever. The simple <span name="landing">fix</span> is to
 add an `isJumping_` Boolean field to `Heroine` that tracks when she's jumping,
 and then do:
+
+"공중 점프"를 방지할 수 있는 것이 아무것도 없습니다. 여주인공이 공중에 떠 있는 동안에 B 버튼을 연타한다면 여주인공은 영원이 둥둥 떠다닐 것입니다. 여주인공의 점프 상태를 알 수 있는 Boolean 변수 `isJumping_`을 `여주인공`에 추가하면 <span name="landing">고칠 수</span> 있습니다.
 
 ^code spaghetti-2
 
@@ -49,40 +69,64 @@ and then do:
 There should also be code that sets `isJumping_` back to `false` when the
 heroine touches the ground. I've omitted that here for brevity's sake.
 
+여주인공이 땅에 닿으면 `isJumping_`을 다시 `false` 상태로 변경하는 코드가 필요합니다. 여기선 코드를 간결하게 하기 위해서 생략하였습니다.
+
 </aside>
 
 Next, we want the heroine to duck if the player presses down while she's on the
 ground and stand back up when the button is released:
 
+다음은 플레이어가 땅에 닿아있는 동안에 DOWN 키를 누르면 여주인공을 웅크리게 만들고 싶습니다. DOWN 키에서 손을 떼면 여주인공은 다시 일어섭니다.
+
 ^code spaghetti-3
 
 Spot the bug this time?
 
+버그를 찾았습니까?
+
 With this code, the player could:
+
+이 코드로는 다음처럼 할 수 있습니다.
 
 1. Press down to duck.
 2. Press B to jump from a ducking position.
 3. Release down while still in the air.
 
+--
+
+1. 웅크리기 위해서 DOWN키를 누릅니다.
+2. 웅크린 상태에서 점프를 하기 위해서 B키를 누릅니다.
+3. 공중에서 DOWN키에 손을 뗍니다.
+
 The heroine will switch to her standing graphic in the middle of the jump. Time
 for another flag...
+
+여주인공은 점프하는 상태에서 일어서는 그래픽으로 바뀔 것입니다. 다른 flag가 필요해집니다...
 
 ^code spaghetti-4
 
 Next, it would be cool if the heroine did a dive attack if the player presses
 down in the middle of a jump:
 
+다음, 여주인공이 점프한 상태에서 DOWN키를 누르면 다이브 공격을 할 수 있으면 멋있을 것 같습니다.
+
 ^code spaghetti-5
 
 Bug hunting time again. Find it?
 
+버그 사냥 시간입니다. 찾았습니까?
+
 We check that you can't air jump while jumping, but not while diving. Yet
 another field...
+
+우리는 점프하는 중에는 공중 점프를 할 수 없습니다. 하지만 다이빙 중에는 할 수 있습니다. 다른 변수가 또 필요해집니다...
 
 Something is clearly <span name="se">wrong</span> with our approach. Every time
 we touch this handful of code, we break something. We need to add a bunch more
 moves -- we haven't even added *walking* yet -- but at this rate, it will
 collapse into a heap of bugs before we're done with it.
+
+우리의 접근 방식이 확실하게 무언가 <span name="se">잘못되었습니다</span>. 매번 우리가 얼마 되지도 않는 코드를 건드리면, 우리는 무언가 망가뜨립니다. 우리는 추가할 움직임이 아직 더 있습니다. 우리는 아직 *걷기*를 추가하지 않았습니다. 하지만 이런 식으로 우리가 끝내기도 전에 버그를 만들 것입니다.
 
 <aside name="se">
 
@@ -90,18 +134,26 @@ Those coders you idolize who always seem to create flawless code aren't simply
 superhuman programmers. Instead, they have an intuition about which *kinds* of
 code are error-prone, and they steer away from them.
 
+여러분이 우상화하는, 흠이 전혀 없는 코드를 만드는 것처럼 보이는 코더들은 단순히 초인적인 프로그래머가 아닙니다. 대신에, 그들은 에러를 발생시키기 좋은 코드의 *종류*에 대한 직관력을 가지고 있으며, 그 코드를 피합니다.
+
 Complex branching and mutable state -- fields that change over time -- are two
 of those error-prone kinds of code, and the examples above have both.
+
+복잡한 분기와 시간에 따라 변하는 가변적인 상태는 에러를 발생시키기 좋은 코드입니다. 위의 코드는 둘 다 가지고 있습니다.
 
 </aside>
 
 ## Finite State Machines to the Rescue
+
+## 유한 상태 기계를 통해 해결하다
 
 In a fit of frustration, you sweep everything off your desk except a pen and
 paper and start drawing a flowchart. You draw a box for each thing the heroine
 can be doing: standing, jumping, ducking, and diving. When she can respond to a
 button press in one of those states, you draw an arrow from that box, label it
 with that button, and connect it to the state she changes to.
+
+좌절 속에서 여러분은 펜과 종이를 제외한 모든 것을 치워버리고, 플로우 차트를 그리기 시작합니다. 여러분은 여주인공이 할 수 있는 행동들을 박스로 그립니다. 서기, 점프, 웅크리기, 다이브하기. 여주인공은 이런 상태들 중에서 키가 눌러지면 하나의 반응을 할 수 있습니다. 여러분은 박스에서 화살표를 그릴 수 있습니다. 그리고 화살표에 버튼이름을 붙입시다. 그리고 변할 여주인공의 상태로 연결합니다.
 
 <img src="images/state-flowchart.png" alt="A flowchart containing boxes for Standing, Jumping, Diving, and Ducking. Arrows for button presses and releases connect some of the boxes." />
 
@@ -110,17 +162,27 @@ a branch of computer science called *automata theory* whose family of data
 structures also includes the famous Turing machine. FSMs are the simplest member
 of that family.
 
+축하합니다. 여러분은 방금 *유한 상태 기계*를 만들었습니다. 유명한 튜링 기계를 포함하는 자료 구조 영역 중 하나인 *오토마타 이론*이라는 컴퓨터 과학의 한 분야에서 나온 것입니다. FSM은 이 영역 중에서 가장 단순한 것입니다.
+
 The <span name="adventure">gist</span> is:
+
+<span name="adventure">요지</span>는 다음과 같습니다.
 
  *  **You have a fixed *set of states* that the machine can be in.** For our
     example, that's standing, jumping, ducking, and diving.
+
+ *  **기계가 될 수 있는 *상태*를 확정해야 합니다.** 예를들어 우리의 예시에서는 상태는 서기, 점프, 웅크리기, 다이브입니다.
 
  *  **The machine can only be in *one* state at a time.** Our heroine can't be
     jumping and standing simultaneously. In fact, preventing that is one reason
     we're going to use an FSM.
 
+ *  **기계는 한 번에 *하나*의 상태를 가질 수 있습니다.** 우리의 여주인공은 점프하면서 동시에 서있을 수 없습니다. 사실, 이를 방지하기 위해서 우리는 FSM을 사용합니다.
+
  *  **A sequence of *inputs* or *events* is sent to the machine.** In our example,
     that's the raw button presses and releases.
+
+ *  ***입력* 혹은 *이벤트*의 연속은 기계로 보내집니다.** 우리의 예시에서 버튼이 눌러졌는지, 떼어졌는지입니다.
 
  *  **Each state has a *set of transitions*, each associated with an input and
     pointing to a state.** When an input comes in, if it matches a transition for
@@ -128,11 +190,17 @@ The <span name="adventure">gist</span> is:
     to.
 
     For example, pressing down while standing transitions to the ducking state. Pressing down while jumping transitions to diving. If no transition is defined for an input on the current state, the input is ignored.
+    
+ *  **각각의 상태는 각각의 입력에 관련되고 상태를 가리키는 *이행 세트*를 가집니다.** 입력이 들어오고, 그 입력이 현재 상태의 이행에 잘 맞다면, 기계는 이행이 가리키는 상태로 변화합니다.
+ 
+ 예를 들어, 서있는 동안에 DOWN키를 누르면, 이행은 웅크리는 상태입니다. 점프 중에서 DOWN 키를 누르면, 이행은 다이브입니다. 만약에 현재 상태에서 입력에 대해 정의된 이행이 없다면, 입력은 무시됩니다.
 
 In their pure form, that's the whole banana: states, inputs, and transitions.
 You can draw it out like a little flowchart. Unfortunately, the compiler doesn't
 recognize our scribbles, so how do we go about *implementing* one? The Gang of
 Four's State pattern is one method -- which we'll get to -- but let's start simpler.
+
+여러분은 플로우 차트로 그릴 수 있습니다. 운 나쁘게도 컴파일러는 우리가 끄적거린 것을 이해할 수 없습니다. 그래서 우리는 어떻게 *구현*해야 할까요? GoF의 State 패턴은 하나의 메소드이지만 좀 더 단순하게 시작해봅시다.
 
 <aside name="adventure">
 
@@ -140,9 +208,13 @@ My favorite analogy for FSMs is the old text adventure games like Zork. You have
 a world of rooms that are connected to each other by exits. You explore them by
 entering commands like "go north".
 
+FSM에 대한 내가 가장 좋아하는 비유는 Zork와 같은 오래된 텍스트 모험 게임입니다. 여러분은 출구들로 연결된 방의 세계를 가지고 있습니다. 여러분은 "북쪽으로 가자"와 같은 커맨드를 입력하면 모험할 수 있습니다.
+
 This maps directly to a state machine: Each room is a state. The room you're in
 is the current state. Each room's exits are its transitions. The navigation
 commands are the inputs.
+
+이는 상태 기계와 바로 연결할 수 있습니다. 각각의 방은 상태입니다. 여러분이 있는 방은 현재의 상태입니다. 각각의 방의 출구는 이행입니다. 조종 커맨드는 입력입니다.
 
 </aside>
 
@@ -153,8 +225,12 @@ aren't valid: `isJumping_` and `isDucking_` should never both be true, for
 example. When you have a handful of flags where only one is `true` at a time,
 that's a hint that what you really want is an `enum`.
 
+한 가지 문제가 있는데 우리의 여주인공 클래스가 가진 일부 Boolean 필드의 조합들이 유효하지 않다는 것입니다. 예를들어, `isJumping_`과 `isDucking_`는 동시에 `true`일 수 없습니다. 당신이 같은 시간에 오직 하나만 `true`이어야 하는 몇개의 플래그를 가지고 있을 때, `enum`은 니가 정말로 원하는 것에 대한 힌트일 수 있습니다.
+
 In this case, that `enum` is exactly the set of states for our FSM, so let's
 define that:
+
+이 케이스에서, `enum`은 정확히 우리의 FSM을 위한 state들의 집합입니다. 이제 정의해봅시다.
 
 ^code enum
 
