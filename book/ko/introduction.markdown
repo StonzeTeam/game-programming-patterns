@@ -4,7 +4,7 @@
 In fifth grade, my friends and I were given access to a little unused
 classroom housing a couple of very beat-up TRS-80s. Hoping to inspire us, a
 teacher found a printout of some simple BASIC programs for us to tinker with.
-5번째 단계에서, 나와 내 친구들은 매우 낡아 빠진 g한 쌍의 TRS-80가 있는 사용하지 않는 작은 교실에의 접근을 허용받았다. 우리들을 격려하기  위하여, 선생님은 우리들을 위해 만지작거릴수 있는 몇개의 간단한 기본 프로그램 인쇄물을 찾았다. 
+5번째 단계에서, 나와 내 친구들은 매우 낡아 빠진 한 쌍의 TRS-80가 있는 사용하지 않는 작은 교실에의 접근을 허용받았다. 우리들을 격려하기  위하여, 선생님은 우리들을 위해 만지작거릴수 있는 몇개의 간단한 기본 프로그램 인쇄물을 찾았다. 
 
 The audio cassette drives on the computers were broken, so any time we wanted to
 run some code, we'd have to carefully type it in from scratch. This led us
