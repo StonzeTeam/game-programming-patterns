@@ -8,7 +8,7 @@ This chapter is an anomaly. Every other chapter in this book shows
 you how to use a design pattern. This chapter shows you how *not* to use
 one.
 
-이 챕터는 이례적입니다. 이 책의 다른 챕터는 어떻게 디자인 패턴을 사용해야하는지 보여주고 있습니다. 하지만 이 챕터는 어떻게 사용하면 안되는지 보여주고 있습니다.
+이 챕터는 이례적입니다. 이 책의 다른 챕터는 어떻게 디자인 패턴을 사용해야하는지 보여주고 있습니다. 하지만 이 챕터는 어떻게 사용하면 *안되는지* 보여주고 있습니다.
 
 Despite noble intentions, the <a class="gof-pattern"
 href="http://c2.com/cgi/wiki?SingletonPattern">Singleton</a> pattern described
@@ -16,9 +16,8 @@ by the Gang of Four usually does more harm than good. They stress that the
 pattern should be used sparingly, but that message was often lost in translation
 to the <span name="instance">game industry</span>.
 
-좋은 의도에도 불구하고, GoF에 의해 기술된 <a class="gof-pattern"
-href="http://c2.com/cgi/wiki?SingletonPattern">싱글톤 패턴</a>은 좋은 점보다 나쁜 점이 더 많습니다.
-그들은 이 패턴이 드물게 사용되어야 하지만 <span name="instance">게임 산업</span>에서 번역될 때, 때때로 그 메세지가 사라졌다는 것을 강조합니다.
+GoF에 의해 기술된 <a class="gof-pattern"
+href="http://c2.com/cgi/wiki?SingletonPattern">싱글톤 패턴</a>은 좋은 의도에도 불구하고 일반적으로 좋은 점보다 나쁜 점이 더 많습니다. 이 패턴은 조심히 사용되어야 하지만 <span name="instance">게임 산업</span>에서 사용될 때, 때때로 그 의도가 잊혀집니다.
 
 Like any pattern, using Singleton where it doesn't belong is about as helpful as
 treating a bullet wound with a splint. Since it's so overused, most of this
