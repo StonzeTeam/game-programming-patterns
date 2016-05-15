@@ -250,14 +250,25 @@ We're just missing a piece between the input handler and the command that takes
 the command and invokes it on the right object. First, we change `handleInput()`
 so that it *returns* commands:
 
+이제 우리는 이 클래스를 게임 내 어떤 케릭터에도 사용할 수 있습니다. 우리는 잠시 input hadler와
+Command 사이에서 command를 받아서 적합한 오브젝트를 호출 사이의 조각을 잃어버렸습니다.
+먼저, 우리는 Command를 *리턴*할 수 있도록 `handleInput()`을 바꿔야 합니다.
+
 ^code handle-input-return
 
 It can't execute the command immediately since it doesn't know what actor to
 pass in. Here's where we take advantage of the fact that the command is a
 reified call -- we can *delay* when the call is executed.
 
+즉시 Command를 실행시킬 수는 없습니다. 왜냐하면 어떤 actor가 전달되었는지 모르기 때문입니다.
+이것이 바로 Command가 구체화된 호출이라는 사실을 사용하는 부분입니다. 우리는 호출이 실행되는
+것을 *지연*시킬 수 있습니다.
+
 Then, we need some code that takes that command and runs it on the actor
 representing the player. Something like:
+
+그러면 우리는 command를 받아서 플레이어를 나타내는 actor를 실행시키는 코드를 추가해야 합니다.
+다음과 같습니다.
 
 ^code call-actor-command
 
