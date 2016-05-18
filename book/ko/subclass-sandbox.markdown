@@ -65,14 +65,15 @@ going to happen?
     ray, and Dijon mustard ray are all pretty similar when you get down to it.
     If the people implementing those don't coordinate, there's going to be a lot
     of duplicate code and effort.
- *  *여기에는 쓸모 없는 코드가 많을 것이다.* 각각의 파워들이 걷잡을 수 없이 다양해지는 동안, 우리는 많은 겸침이 있을 것이라는 걸 계속해서 예상 가능하다.
-
- *  *Every part of the game engine will get coupled to these classes.* Without
+ *  *여기에는 쓸모 없는 코드가 많을 것이다.* 각각의 파워들이 걷잡을 수 없이 다양해지는 동안, 우리는 많은 겸침이 있을 것이라는 걸 계속해서 예상 가능하다. 많은 슈퍼파워들이 시각 효과와 플레이 사운드를 같은 방법으로 낳을 것이다. 당신이 한파 광선, 열 광선, 그리고 디종 겨자 광선을 시작할 때, 그것들은 모두 서로간에 매우 유사할 것이다. 만약 그것들을 실행하려는 사람들이 그것들은 조직화하지 않으면, 거기엔 매우 많은 복제 코드와 노력이 필요할 것이다.
+ 
+ *  *Every part of the game engine will get coupled to these classes.* Withoutㅁ
     knowing better, people will write code that calls into subsystems that were
     never meant to be tied directly to the superpower classes. If our renderer
     is organized into several nice neat layers, only one of which is intended to
     be used by code outside of the graphics engine, we can bet that we'll end up
     with superpower code that pokes into every one of them.
+ *  *게임 엔진의 모든 부분들은 이러한 class들에 연결될 것이다.* 더 잘 알지 않고서는, 사람들은 슈퍼파워 class들과 직접적으로 연결되는 것을 전혀 의미하지 않는 하부시스템들을 소환하는 코드들을 쓸 것이다. 만약 우리의 renderer가 멋지게 정돈된 몇몇의 layer들을 조직화되게 한다면, 오직 그것들 중 하나만이 그래픽 엔진의 밖에 있는 코드에 의해 사용되게끔 의도될 것이고, 우리는 결국 모든 슈퍼파워에 쓸데 없이 참견하는 슈퍼파워 코드들을 끝내는 데에 내기를 걸 수 있을 것이다.
 
  *  *When these outside systems need to change, odds are good some random
     superpower code will get broken.* Once we have different superpower classes
@@ -80,11 +81,13 @@ going to happen?
     inevitable that changes to those systems will impact the power classes.
     That's no fun because your graphics, audio, and UI programmers probably
     don't want to also have to be gameplay programmers *too*.
+ *  *이러한 외부 시스템들의 변화가 필요할 때, odd들은 망가지기 좋은 몇몇의 무작위한 슈퍼파워 코드이다. 우리가 게임 엔진의 다양하고 잡다한 부분들을 위해 각양각색의 슈퍼파워 class들을 연결할 때, 그 시스템들의 변화가 파워 class들에게 영향을 주는 것은 피할 수 없다. 이는 재미 없다. 왜냐하면 당신의 ㄱ래픽, 오디오, 그리고 UI 프로그래머들이 아마도 게임플레이 프로그래머들*도* 원하지 않을 것이다.
 
  *  *It's hard to define invariants that all superpowers obey.* Let's say we
     want to make sure that all audio played by our powers gets properly queued
     and prioritized. There's no easy way to do that if our hundred classes are
     all directly calling into the sound engine on their own.
+ *  *모든 슈퍼파워가 복종하는 불변요소를 정의하는 것은 어렵다.* 우리가 우리들의 파워가 적절하게 줄을 서서 기다리고 우선순위를 매기도록 플레이되는 모든 오디오를 확신하고 싶어한다고 해보자. 만약 우리의 몇백개의 class들이 모두 직접적으로 그들 자신의 소리 엔진을 소환하려면 이는 쉬운 방법이 아닐 것이다.
 
 What we want is to give each of the gameplay programmers who is implementing a
 superpower a set of primitives they can play with. You want your power to play a
@@ -92,15 +95,18 @@ sound? Here's your `playSound()` function. You want particles? Here's
 `spawnParticles()`. We'll make sure these operations cover everything you need
 to do so that you don't need to `#include` random headers and nose your way into
 the rest of the codebase.
+우리가 원하는 것은 게임에서의 일련의 원시적인 슈퍼파워들을 실행하는 각각의 게임플레이 프로그래머들에게 제공하는 것이다. 당신은 당신의 파워가 소리가 나는 것을 원하는가? 여기에 당신의 `playSound()` 기능이 있다. 당신은 입자들을 원하는가? 여기에 `spawnParticles()`가 있다. 우리는 이러한 작업들이 당신이 원하는 모든 것을 덮는 걸 확신할 수 있도록 당신이 `#include` 무작위의 헤더를 필요로 하지 않고 나머지의 코드베이스들이 당신의 길을 간섭하지 않도록 할 것이다.
 
 We do this by making these operations *protected methods of the* `Superpower`
 *base class*. Putting them in the base class gives every power subclass direct,
 easy access to the methods. Making them protected (and likely non-virtual) communicates
 that they exist specifically to be *called* by subclasses.
+우리는 *'슈퍼파워' *기본 class*의 보호되어진 방법*인 이러한 작업들을 만듦으로써 이를 해결한다. 그것들을 기본 class에 넣는 것은 모든 파워 subclass가 직접적으로, 방법에 쉽게 접근하게 만든다. 보호된(그리고 비가상적인 것과 다름없는) 그것들을 만드는 것은 그들이 subclass라고 불리우며 분명히 존재하는 것들과 소통한다.
 
 Once we have these toys to play with, we need a place to use them. For that,
 we'll define a *sandbox method*, an abstract protected method that subclasses
 must implement. Given those, to implement a new kind of power, you:
+우리가 이러한 장난감들을 함께 갖고 놀 때, 우리는 그것들을 사용할 장소가 필요하다. 그 때문에, 우리는 subclass들이 반드시 실행해야 하는 추상적인 보호 방법인 *sandbox method*를 정의할 것이다. 
 
 1.  Create a new class that inherits from `Superpower`.
 1. '슈퍼파워'에서 물려받은 새로운 class를 만들어라.
@@ -110,18 +116,20 @@ must implement. Given those, to implement a new kind of power, you:
 
 3.  Implement the body of that by calling the protected methods that
     `Superpower` provides.
-3.  
+3.  '슈퍼파워'가 제공하는 보호 방법이라고 불리우는 그것의 몸체를 실행해라.
 
 We can fix our redundant code problem now by making those provided operations as
 high-level as possible. When we see code that's duplicated between lots of the
 subclasses, we can always roll it up into `Superpower` as a new operation that
 they can all use.
+우리는 지금 가능한 한 고도의 레벨에서 제공되어지는 작업을 만듦으로써 우리의 불필요한 코드 문제를 개선할 수 있다. 우리가 수많은 subclass들 사이에서 복제되는 코드를 볼 때, 우리는 항상 그것을 우리가 사용할 수 있는 새로운 작업으로써의 '슈퍼파워'로 둥글게 만다. 
 
 We've addressed our coupling problem by constraining the coupling to one place.
 `Superpower` itself will end up coupled to the different game systems, but our
 hundred derived classes will not. Instead, they are *only* coupled to their base
 class. When one of those game systems changes, modification to `Superpower` may
 be necessary, but dozens of subclasses shouldn't have to be touched.
+우리는 하나의 장소에 연결시키도록 강요하는 우리들의 연결 문제를 다뤘다. '슈퍼파워' 그 자체는 다른 게임 시스템에 연결되는 것으로 끝날 것이지만, 우리들의 수백개의 파생된 class들은 그렇지 않을 것이다. 대신에, 그것들은 *오직* 그들의 기본 class에 연결된다. 그러한 게임 시스템 중 하나가 바뀔 때, '슈퍼파워'의 변경은 아마도 불가피할 것이지만, 수십개의 subclass들은 건드릴 필요가 없다.
 
 This pattern leads to an architecture where you have a shallow but wide class
 hierarchy. Your <span name="wide">inheritance</span> chains aren't *deep*, but
@@ -129,14 +137,18 @@ there are a *lot* of classes that hang off `Superpower`. By having a single
 class with a lot of direct subclasses, we have a point of leverage in our
 codebase. Time and love that we put into `Superpower` can benefit a wide set of
 classes in the game.
+이 패턴은 당신이 얕지만 광범위한 class 계층을 가지는 아키텍쳐를 이끈다. 당신의 <span name="wide">상속</span> 사슬을 *깊지* 않지만, '슈퍼파워'를 놓아주는 *많은* class들이 있다. 많은 직통의 subclass들과 함께하는 단일한 class들을 가짐으로써, 우리는 우리들의 코드베이스에서 영향력을 가지고 있다. 우리가 '슈퍼파워'에 넣어둔 시간과 사랑은 게임에서의 광범위한 일련의 class들에 유용하게 된다.
 
+<aside name="wide">
 <aside name="wide">
 
 Lately, you find a lot of people criticizing inheritance in object-oriented
 languages. Inheritance *is* problematic -- there's really no deeper coupling in
 a codebase than the one between a base class and its subclass -- but I find
 *wide* inheritance trees to be easier to work with than *deep* ones.
+최근에, 당신은 객체 지향 언어의 상속을 비판하는 많은 사람들을 발견한다. 상속*은* 문제가 많다 -- 그것은 정말로 base class와 그것의 subclass간의 연결보다 코드베이스에 깊게 연결되어 있지 않다 -- 하지만 나는 *광범위한* 상속 나무들이 *깊은* 것들보다 쉽게 작업할 수 있다는 것을 발견했다. 
 
+</aside>
 </aside>
 
 ## The Pattern
