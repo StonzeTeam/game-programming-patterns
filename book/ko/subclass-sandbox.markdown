@@ -1,36 +1,51 @@
 ^title Subclass Sandbox
 ^section Behavioral Patterns
+^title Subclass Sandbox
+^section 행동 패턴
+
 
 ## Intent
+## 목적
 
 *Define behavior in a subclass using a set of operations provided by its
 base class.*
+*base class에서 제공되어지는 일련의 작업을 사용하는 subclass에서의 행동을 정의하라.*
 
 ## Motivation
+## 동기부여
 
 Every kid has dreamed of being a superhero, but unfortunately, cosmic rays are
 in short supply here on Earth. Games that let you pretend to be a superhero are
 the closest approximation. Because our game designers have never learned to say,
 "no", *our* superhero game aims to feature dozens, if not hundreds, of
 different superpowers that heroes may choose from.
+모든 아이들은 슈퍼히어로가 되려는 꿈을 갖지만, 불행하게도, 지구상에 우주선들은 아직 공급이 딸린다. 당신이 슈퍼히어로인 체 하게 만드는 게임들은 가장 가까운 근사값이다. 왜냐하면 우리들의 게임 디자이너들은 "아니", 라고 말하는 것을 전혀 배우지 못했고, *우리들의* 슈퍼히어로 게임은 수십개를 특징으로 삼는 것을 목표로 가진다. 만약 수백개가 아니더라도, 히어로들이 선택할 수도 있는 각양 각색의 슈퍼 파워들을. 
 
 Our plan is that we'll have a `Superpower` base class. Then, we'll have a <span
 name="lots">derived</span> class that implements each superpower. We'll divvy up
 the design doc among our team of programmers and get coding. When we're done,
 we'll have a hundred superpower classes.
+우리들의 계획은 우리가 '슈퍼파워' base class를 갖는 것이다. 그리고나서, 우리는 각각의 슈퍼파워 요소들인 <span
+name="lots">파생된</span> class들을 가질 것이다.
 
+<aside name="lots">
 <aside name="lots">
 
 When you find yourself with a *lot* of subclasses, like in this example, that
 often means a data-driven approach is better. Instead of lots of *code* for
 defining different powers, try finding a way to define that behavior in *data*
 instead.
+이 예시와 같이 당신이 *수많은* subclass들을 스스로 찾을 때, 그것은 흔히 데이터 기반 접근이라고 의미하는게 나을 것이다. 각각 다른파웓르을 정의하는 많은 *코드* 대신에, 그 행동을 *데이터*로 정의할 방법을 찾는 것을 시도해라.
 
 Patterns like <a class="pattern" href="type-object.html">Type Object</a>, <a
 class="pattern" href="bytecode.html">Bytecode</a>, and <a class="gof-pattern"
 href="http://en.wikipedia.org/wiki/Interpreter_pattern">Interpreter</a> can all
 help.
+<a class="pattern" href="type-object.html">Type Object</a>, <a
+class="pattern" href="bytecode.html">Bytecode</a>와 같은 패턴들, 그리고 <a class="gof-pattern"
+href="http://en.wikipedia.org/wiki/Interpreter_pattern">Interpreter</a>는 도움이 될 것이다.
 
+</aside>
 </aside>
 
 We want to immerse our players in a world teeming with variety. Whatever power
@@ -38,9 +53,11 @@ they dreamed up when they were a kid, we want in our game. That means these
 superpower subclasses will be able to do just about everything: play sounds,
 spawn visual effects, interact with AI, create and destroy other game entities,
 and mess with physics. There's no corner of the codebase that they won't touch.
+우리는 우리의 플레이어들이 다양한 세계에 몰두하기를 원한다. 그들이 아이였을 때 꿈꿔온 파워가 무엇이든지, 우리는 그것들이 우리의 게임에 있기를 원한다. 이것은 이러한 슈퍼파워 subclass들이 모든 것들을 보여주는 것을 가능케 한다는 의미이다: 플레이 사운드, 시각 효과, AI와의 상호작용, 다른 게임 개체들은 창조 혹은 파괴, 그리고 물리학을 파괴하는 것. 여기에는 그들이 건드리고 싶지 않아 하는 코드 베이스의 모서리가 없다.
 
 Let's say we unleash our team and get them writing superpower classes. What's
 going to happen?
+우리가 우리들의 팀을 촉발시키고 그들이 슈퍼파워 class들을 쓰게 한다고 말해 보자. 무슨 일이 생길까?
 
  *  *There will be lots of redundant code.* While the different powers will be
     wildly varied, we can still expect plenty of overlap. Many of them will
@@ -48,6 +65,7 @@ going to happen?
     ray, and Dijon mustard ray are all pretty similar when you get down to it.
     If the people implementing those don't coordinate, there's going to be a lot
     of duplicate code and effort.
+ *  *여기에는 쓸모 없는 코드가 많을 것이다.* 각각의 파워들이 걷잡을 수 없이 다양해지는 동안, 우리는 많은 겸침이 있을 것이라는 걸 계속해서 예상 가능하다.
 
  *  *Every part of the game engine will get coupled to these classes.* Without
     knowing better, people will write code that calls into subsystems that were
@@ -85,11 +103,14 @@ we'll define a *sandbox method*, an abstract protected method that subclasses
 must implement. Given those, to implement a new kind of power, you:
 
 1.  Create a new class that inherits from `Superpower`.
+1. '슈퍼파워'에서 물려받은 새로운 class를 만들어라.
 
 2.  Override `activate()`, the sandbox method.
+2.  sandbox 방법인 `activate()`를 우선시해라.
 
 3.  Implement the body of that by calling the protected methods that
     `Superpower` provides.
+3.  
 
 We can fix our redundant code problem now by making those provided operations as
 high-level as possible. When we see code that's duplicated between lots of the
